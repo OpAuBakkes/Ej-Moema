@@ -3,6 +3,123 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Ne gelukkigen eh Mama ❤️</title>
+<style>
+body{
+  margin:0;font-family:system-ui,sans-serif;
+  background:linear-gradient(180deg,#ff7f9d 0%,#ffa6c1 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;color:#fff;text-align:center;overflow:hidden;
+}
+h1{
+  font-size:2rem;margin:10px 0;
+  animation:pulse 1s infinite alternate;
+}
+@keyframes pulse{0%{transform:scale(1)}100%{transform:scale(1.1)}}
+#boodschap{
+  font-size:1.3rem;margin:20px;padding:12px;
+  background:rgba(255,255,255,0.25);border-radius:12px;
+  animation:pulseText 1.5s infinite alternate;
+}
+@keyframes pulseText{0%{transform:scale(1)}100%{transform:scale(1.05)}}
+button{
+  background:#fff;color:#d9004c;border:none;padding:14px 20px;
+  font-size:1.3rem;font-weight:bold;border-radius:12px;margin:12px;
+  cursor:pointer;width:80%;max-width:320px;box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;
+}
+.slideshow{
+  width:90%;max-width:300px;margin:10px auto;border-radius:12px;overflow:hidden;
+}
+.slideshow img{width:100%;height:auto;display:block;transition:opacity 1s ease-in-out;}
+</style>
+</head>
+<body>
+
+<canvas id="fx"></canvas>
+
+<h1>Ne gelukkigen eh Mama ❤️</h1>
+<div id="boodschap">Mama, merci voor alles! Betere moeder kon ik ni krijgen! Mickey 💋</div>
+
+<div class="slideshow" id="slideshow">
+  <img src="https://picsum.photos/300/200?random=1" alt="Foto 1">
+  <img src="https://picsum.photos/300/200?random=2" alt="Foto 2" style="opacity:0">
+  <img src="https://picsum.photos/300/200?random=3" alt="Foto 3" style="opacity:0">
+</div>
+
+<button id="partyBtn">Klik hier en laatnt ontploffen!</button>
+
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// ===== Slideshow =====
+const slides = document.querySelectorAll("#slideshow img");
+let current=0;
+function nextSlide(){
+  slides[current].style.opacity=0;
+  current=(current+1)%slides.length;
+  slides[current].style.opacity=1;
+}
+setInterval(nextSlide,3000);
+
+// ===== Confetti & hartjes =====
+const canvas=document.getElementById("fx"),ctx=canvas.getContext("2d");
+let W,H;function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.onresize=resize;
+let parts=[];
+function rnd(min,max){return Math.random()*(max-min)+min;}
+function newPart(){
+  const kleuren=["#fff","#ffe066","#ff4d6d","#69dbff","#ff80c1"];
+  const vormen=["confetti","hart"];
+  return{x:W/2,y:H/2,vx:rnd(-4,4),vy:rnd(-8,-2),s:rnd(8,18),
+    kleur:kleuren[Math.floor(Math.random()*kleuren.length)],
+    vorm:vormen[Math.floor(Math.random()*vormen.length)],
+    life:0,max:100};
+}
+function drawHeart(x,y,s,color){
+  ctx.fillStyle=color;ctx.beginPath();
+  let tc=s*0.3;
+  ctx.moveTo(x,y+tc);
+  ctx.bezierCurveTo(x,y,x-s/2,y,x-s/2,y+tc);
+  ctx.bezierCurveTo(x-s/2,y+(s+tc)/2,x,y+(s+tc)/2,x,y+s);
+  ctx.bezierCurveTo(x,y+(s+tc)/2,x+s/2,y+(s+tc)/2,x+s/2,y+tc);
+  ctx.bezierCurveTo(x+s/2,y,x,y,x,y+tc);
+  ctx.closePath();ctx.fill();
+}
+function loop(){
+  ctx.clearRect(0,0,W,H);
+  parts.forEach((p,i)=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.life++;
+    if(p.vorm==="confetti"){ctx.fillStyle=p.kleur;ctx.fillRect(p.x,p.y,p.s,p.s/2);}
+    else{drawHeart(p.x,p.y,p.s,p.kleur);}
+    if(p.life>p.max)parts.splice(i,1);
+  });
+  requestAnimationFrame(loop);
+}
+loop();
+
+// ===== Button click =====
+const btn = document.getElementById("partyBtn");
+const music=document.getElementById("music");
+btn.onclick=function(){
+  for(let i=0;i<200;i++)parts.push(newPart());
+  music.play();
+  btn.style.display="none"; // knop weg
+}
+</script>
+
+</body>
+</html>
+
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>Wat vond ge ervan? ❤️</title>
 <style>
 body{
