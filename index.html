@@ -17,23 +17,38 @@
       overflow: hidden;
       text-align: center;
       padding: 20px;
+      position: relative;
     }
     h1 {
       font-size: 3em;
       color: #ff4d6d;
       margin-bottom: 0.5em;
+      z-index: 1;
+      position: relative;
     }
     p {
       font-size: 1.5em;
       color: #ff1a75;
       line-height: 1.6;
       max-width: 600px;
+      z-index: 1;
+      position: relative;
     }
     canvas {
       position: absolute;
       top: 0;
       left: 0;
       pointer-events: none;
+    }
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      animation: floatUp 1s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
     }
   </style>
 </head>
@@ -57,6 +72,7 @@
     canvas.width = W;
     canvas.height = H;
 
+    // Confetti
     const confettiCount = 150;
     const confetti = [];
 
@@ -114,6 +130,23 @@
       H = window.innerHeight;
       canvas.width = W;
       canvas.height = H;
+    });
+
+    // Tik-hartjes
+    function createHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = `${x - 12}px`;
+      heart.style.top = `${y - 12}px`;
+      heart.innerText = '❤️';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
+    }
+
+    window.addEventListener('click', e => createHeart(e.clientX, e.clientY));
+    window.addEventListener('touchstart', e => {
+      const touch = e.touches[0];
+      createHeart(touch.clientX, touch.clientY);
     });
   </script>
 </body>
